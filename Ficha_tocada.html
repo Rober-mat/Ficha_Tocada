@@ -1,0 +1,80 @@
+<!DOCTYPE html> 
+<html lang="es"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>UNGS/IDH - Ficha Tocada / Ficha Movida</title> 
+    <style> #tablero { display: grid; grid-gap: 1px; } .celda { width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border: 1px solid black; background-color: #f0f0f0; } .ficha { border-radius: 50%; width: 30px; height: 30px; } .ficha-verde { background-color: #4CAF50; } .ficha-rojo { background-color: #F44336; } .ficha-azul { background-color: #2196F3; } .ficha-amarelo { background-color: #FFEB3B; } 
+        .ungspantone { fill: #FF6347; } /* Ajusta el color a tu color UNGSpantone */
+        .idhcolor { fill: #4682B4; } /* Ajusta el color a tu color IDHcolor */
+        .centrado {
+            text-align: center;
+        }
+    </style> 
+</head> 
+<body> 
+    <h1 class="centrado" >Ficha Tocada / Ficha Movida</h1>      
+        <!-- Text Nodes -->
+        <text class="centrado" x="4" y="2.2" font-size="0.1" font-weight="bold" text-anchor="start" class="idhcolor">UNGS/IDH - </text>
+        <text class="centrado"  x="-0.2" y="-0.1" font-size="0.07" font-weight="bold" text-anchor="start">Universidad Nacional de General Sarmiento <br> </text>
+        <text class="centrado" x="2" y="-0.7" font-size="0.07" font-weight="bold" text-anchor="start">Instituto del Desarrollo Humano <br> <br> </text>
+
+        <!-- Optional border -->
+        <!-- Uncomment if you want to see a border -->
+        <!-- <rect x="0" y="0" width="5" height="5" stroke="red" stroke-width="0.1" fill="none" /> -->
+    </svg>
+    <div class="centrado"> <label for="tamano">Tamaño del tablero:</label> <input type="number" id="tamano" min="3" max="10" value="5"> <button onclick="cambiarTamano()">Cambiar Tamaño</button> </div> 
+    <div  class="centrado"> <label for="colorFicha1">Color Ficha 1:</label> <input type="color" id="colorFicha1" value="#4CAF50"> <label for="colorFicha2">Color Ficha 2:</label> <input type="color" id="colorFicha2" value="#F44336"> <button onclick="cambiarColores()">Aplicar Colores</button> </div> 
+    <div  class="centrado" id="tablero"></div> 
+    <br> 
+    <button  onclick="mover('arriba')">Arriba</button> <button onclick="mover('derecha')">Derecha</button> <button onclick="mover('diagonal')">Diagonal</button> <button onclick="reiniciar()">Reiniciar</button> <!-- Botón de reinicio --> 
+    <script> 
+        let tamaño = 5; 
+        let fila = tamaño - 1; 
+        let col = 0; 
+        let colorFicha1 = '#4CAF50'; 
+        let colorFicha2 = '#F44336'; 
+        let esVerde = true; const tablero = document.getElementById('tablero'); 
+        const inputTamano = document.getElementById('tamano'); 
+        const inputColorFicha1 = document.getElementById('colorFicha1'); 
+        const inputColorFicha2 = document.getElementById('colorFicha2'); 
+        function inicializarTablero() { 
+            tablero.innerHTML = ''; 
+            tablero.style.gridTemplateColumns = `repeat(${tamaño}, 50px)`; 
+            for (let f = 0; f < tamaño; f++) { for (let c = 0; c < tamaño; c++) { const celda = document.createElement('div'); 
+            celda.className = 'celda'; 
+            if (f === fila && c === col) { const ficha = document.createElement('div'); 
+            ficha.className = 'ficha ' + (esVerde ? 'ficha-verde' : 'ficha-rojo'); 
+            ficha.style.backgroundColor = esVerde ? colorFicha1 : colorFicha2; celda.appendChild(ficha); } tablero.appendChild(celda); } } } function mover(direccion) { let nuevoFila = fila; 
+            let nuevoCol = col; 
+            if (direccion === 'arriba' && fila > 0) { nuevoFila--; } else if (direccion === 'derecha' && col < tamaño - 1) { nuevoCol++; } else if (direccion === 'diagonal' && fila > 0 && col     < tamaño - 1) { nuevoFila--; nuevoCol++; } if (nuevoFila !== fila || nuevoCol !== col) { fila = nuevoFila; col = nuevoCol; esVerde = !esVerde; 
+            actualizarTablero(); 
+            comprobarVictoria(); 
+            } 
+            } 
+        function actualizarTablero() { 
+            inicializarTablero();
+            } 
+        function comprobarVictoria() { 
+            if (fila === 0 && col === tamaño - 1) { const colorGanador = esVerde ? colorFicha1 : colorFicha2;
+            alert('¡Felicidades! has ganado.'); } 
+            } 
+        function reiniciar() { 
+            fila = tamaño - 1; 
+            col = 0; esVerde = true; actualizarTablero(); 
+            } 
+        function cambiarTamano() { 
+            tamaño = parseInt(inputTamano.value, 10); 
+            if (isNaN(tamaño) || tamaño < 3) tamaño = 3; 
+            fila = tamaño - 1; 
+            col = 0; actualizarTablero(); 
+            } 
+        function cambiarColores() { 
+            colorFicha1 = inputColorFicha1.value; 
+            colorFicha2 = inputColorFicha2.value; 
+            actualizarTablero(); 
+            } 
+        inicializarTablero(); 
+    </script> 
+</body> 
+</html>
